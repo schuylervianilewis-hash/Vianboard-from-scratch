@@ -426,12 +426,13 @@ class VianKeyboardView @JvmOverloads constructor(
         val density = resources.displayMetrics.density
         val rowCount = layout.getRowCountForMode(layout.mode)
         val rowsTotalHeight = (theme.keyHeightDp * rowCount * density)
+        val rowGapsHeight = (theme.verticalGapDp * (rowCount - 1).coerceAtLeast(0) * density)
         val toolbarHeight = (theme.toolbarHeightDp * density)
         val paddingTopPx = KeyboardGeometry.HELIBOARD_PADDING_TOP_DP * density
         val paddingBottomPx = KeyboardGeometry.HELIBOARD_PADDING_BOTTOM_DP * density
         // Total keyboard height is determined by toolbar + rows + paddingTop + paddingBottom + insets.
         // Vertical gaps between keys are distributed inside the key area so changing vertical gap does not change the keyboard board height.
-        val totalCalculatedHeight = (toolbarHeight + rowsTotalHeight + paddingTopPx + paddingBottomPx + bottomNavInsetPx).toInt()
+        val totalCalculatedHeight = (toolbarHeight + rowsTotalHeight + rowGapsHeight + paddingTopPx + paddingBottomPx + bottomNavInsetPx).toInt()
         val height = totalCalculatedHeight.coerceAtLeast((180 * density).toInt())
         setMeasuredDimension(width, height)
     }
