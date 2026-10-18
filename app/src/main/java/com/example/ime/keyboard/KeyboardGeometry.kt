@@ -278,7 +278,10 @@ class KeyboardGeometry(
 
             val rowCount = rowDefinitions.size.coerceAtLeast(1)
             val totalVerticalGaps = (rowCount - 1) * verticalGapPx
-            val keyHeight = ((availableKeyboardHeight - totalVerticalGaps) / rowCount).coerceAtLeast(0f)
+            // Keep the configured key height stable instead of shrinking every key to absorb missing row-gap space.
+            // onMeasure includes these gaps, so the normal layout fits exactly; coerceAtMost is a safety net for constrained parents.
+            val availableKeyHeight = ((availableKeyboardHeight - totalVerticalGaps) / rowCount).coerceAtLeast(0f)
+            val keyHeight = (theme.keyHeightDp * density).coerceAtMost(availableKeyHeight)
 
             val rowBounds = ArrayList<RectF>(rowCount)
             val keyBoundsList = ArrayList<RectF>()
